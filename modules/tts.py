@@ -1,9 +1,21 @@
 from gtts import gTTS
-import pygame
 import os
-import time
+
+# Try importing pygame
+try:
+    import pygame
+    PYGAME_AVAILABLE = True
+except ImportError:
+    PYGAME_AVAILABLE = False
+
 
 def speak(text):
+    """
+    Convert text to speech.
+    Locally: Plays the audio.
+    Cloud: Saves the audio only.
+    """
+
     os.makedirs("audio", exist_ok=True)
 
     filename = "audio/output.mp3"
@@ -11,15 +23,14 @@ def speak(text):
     tts = gTTS(text=text, lang="en")
     tts.save(filename)
 
-    pygame.mixer.init()
-    pygame.mixer.music.load(filename)
-    pygame.mixer.music.play()
+    if PYGAME_AVAILABLE:
+        pygame.mixer.init()
+        pygame.mixer.music.load(filename)
+        pygame.mixer.music.play()
 
-    while pygame.mixer.music.get_busy():
-        time.sleep(0.5)
+        while pygame.mixer.music.get_busy():
+            continue
 
-    pygame.mixer.quit()
+        pygame.mixer.quit()
 
-
-if __name__ == "__main__":
-    speak("Hello! I am your AI Voice Assistant.")
+    return filename
