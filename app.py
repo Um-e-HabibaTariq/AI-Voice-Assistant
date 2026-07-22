@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 
-from modules.recorder import record_audio
+
 from modules.stt import speech_to_text
 from modules.llm import ask_gemini
 from modules.tts import speak
@@ -263,6 +263,17 @@ with chat_tab:
 # ====================================================
 # VOICE ASSISTANT TAB
 # ====================================================
+try:
+    from modules.recorder import record_audio
+    voice_available = True
+except Exception:
+    voice_available = False
+
+if not voice_available:
+    st.error("Voice recording is not available on the deployed server.")
+    st.stop()
+
+record_audio()
 
 with voice_tab:
 

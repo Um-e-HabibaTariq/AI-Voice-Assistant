@@ -30,5 +30,3 @@ def record_audio(filename="audio/input.wav"):
     return filename
 
 
-if __name__ == "__main__":
-    record_audio()
